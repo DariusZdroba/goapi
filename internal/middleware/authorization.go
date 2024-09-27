@@ -4,10 +4,9 @@ import (
 	"errors"
 	"net/http"
 
-	"github.com/avukadin/goapi/api"
-	"github.com/dariuszdroba/goapi/api"
-	"github.com/dariuszdroba/goapi/internal/tools"
 	log "github.com/sirupsen/logrus"
+	"goapi/api"
+	"goapi/internal/tools"
 )
 
 var UnauthorizedError = errors.New("Invalid username or token")
@@ -28,7 +27,7 @@ func Authorization(next http.Handler) http.Handler {
 		var database *tools.DatabaseInterface
 		database, err = tools.NewDatabase()
 		if err != nil {
-			api.InternalErrorHandler(w)
+			api.InternalErrorHandler(w, err)
 			return
 		}
 		var loginDetails *tools.LoginDetails

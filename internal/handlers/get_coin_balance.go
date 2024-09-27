@@ -2,17 +2,15 @@ package handlers
 
 import (
 	"encoding/json"
-	"goapi/internal/tools"
 	"net/http"
 
-	"github.com/avukadin/goapi/api"
-	"github.com/dariuszdroba/goapi/api"
-	"github.com/dariuszdroba/goapi/internal/tools"
 	"github.com/gorilla/schema"
 	log "github.com/sirupsen/logrus"
+	"goapi/api"
+	"goapi/internal/tools"
 )
 
-func GetCoinBalance(w http.ResponseWriter, r *http.Request) {
+func GetCoinBallance(w http.ResponseWriter, r *http.Request) {
 	var params = api.CoinBalanceParams{}
 	var decoder *schema.Decoder = schema.NewDecoder()
 	var err error
@@ -21,13 +19,13 @@ func GetCoinBalance(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		log.Error(err)
-		api.InternalErrorHandler(w)
+		api.InternalErrorHandler(w, err)
 		return
 	}
-	var databse *tools.DatabaseInterface
+	var database *tools.DatabaseInterface
 	database, err = tools.NewDatabase()
 	if err != nil {
-		api.InternalErrorHandler(w)
+		api.InternalErrorHandler(w, err)
 		return
 	}
 
@@ -35,18 +33,18 @@ func GetCoinBalance(w http.ResponseWriter, r *http.Request) {
 	tokenDetails = (*database).GetUserCoins(params.Username)
 	if tokenDetails == nil {
 		log.Error(err)
-		api.InternalErrorHandler(w)
+		api.InternalErrorHandler(w, err)
 		return
 	}
 	var response = api.CoinBalanceResponse{
-		Balance: (*tokenDetails).Coins,
-		Code:    http.StatusOk,
+		Ballance: (*tokenDetails).Coins,
+		Code:     http.StatusOK,
 	}
 	w.Header().Set("Content-Type", "application/json")
 	err = json.NewEncoder(w).Encode(response)
 	if err != nil {
 		log.Error(err)
-		api.InternalErrorHandler(w)
+		api.InternalErrorHandler(w, err)
 		return
 	}
 }
