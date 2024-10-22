@@ -11,7 +11,7 @@ func Handler(r *chi.Mux) {
 	// Add middleware
 	r.Use(chimiddle.StripSlashes)
 
-	r.Route("/account", func(router chi.Router) {
+	r.Route("/profile", func(router chi.Router) {
 
 		// Middleware for /account route to authorize access
 		router.Use(middleware.Authorization)
